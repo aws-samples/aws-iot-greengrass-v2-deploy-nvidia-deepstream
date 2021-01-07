@@ -1,0 +1,88 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "aws.greengrass.JetsonDLRImageClassification",
+  "ComponentVersion": "1.0.0",
+  "ComponentType": "aws.greengrass.generic",
+  "ComponentDescription": "Sample recipe - Image classification inference using DLR and the resnet18 and NVIDIA Jetson v1 model (Only works on Jetson Devices).",
+  "ComponentPublisher": "AWS",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "accessControl": {
+        "aws.greengrass.ipc.mqttproxy": {
+          "com.example.Pub:publisher:1": {
+            "policyDescription": "Allows access to publish to demo/topic topic.",
+            "operations": [
+              "aws.greengrass#PublishToIoTCore"
+            ],
+            "resources": [
+              "demo/topic"
+            ]
+          }
+        }
+      },
+      "ImageName": "dog.npy",
+      "InferenceInterval": "30",
+      "MLRootPath": "$HOME/greengrass_ml",
+      "Accelerator": "gpu",
+      "ModelResourceKey": {
+        "aarch64": {
+          "25":"\"resnet18_v1-jetson_xavier\"",
+          "24":"\"resnet18_v1-jetson_tx2\"",
+          "33":"\"resnet18_v1-jetson_nano\""
+        }
+      }
+    }
+  },
+  "ComponentDependencies": {
+    "variant.Jetson.ImageClassification.ModelStore": {
+      "VersionRequirement": ">=0.1.1 <1.2.0",
+      "DependencyType": "HARD"
+    },
+    "variant.Jetson.DLR": {
+      "VersionRequirement": ">=0.1.1 <1.4.0",
+      "DependencyType": "HARD"
+    },
+    "aws.greengrass.Nucleus": {
+      "VersionRequirement": ">=2.0.3 <2.1.0",
+      "DependencyType": "SOFT"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux",
+        "architecture": "aarch64"
+      },
+      "Lifecycle": {
+        "install": {
+          "RequiresPrivilege": "true",
+          "script": "\n                                    bash {artifacts:path}/init.sh {artifacts:decompressedPath}/image_classification/sample_images {configuration:/MLRootPath}\n                                    bash {variant.Jetson.DLR:artifacts:decompressedPath}/installer/installer.sh -a {configuration:/Accelerator} -p {configuration:/MLRootPath}",
+          "timeout": "900"
+        },
+        "run": {
+          "RequiresPrivilege": "true",
+          "script": "\n                                    python3 {artifacts:decompressedPath}/image_classification/jetson_inference.py {configuration:/Accelerator} {variant.Jetson.ImageClassification.ModelStore:artifacts:decompressedPath}/ '{configuration:/ModelResourceKey/aarch64}' {configuration:/MLRootPath} {configuration:/ImageName} {configuration:/InferenceInterval}"
+        }
+      },
+      "Artifacts": [
+        {
+          "Uri": "s3://public-ryan/jetson/models/image_classification.zip",
+          "Unarchive": "ZIP",
+          "Permission": {
+            "Read": "OWNER",
+            "Execute": "NONE"
+          }
+        },
+        {
+          "Uri": "s3://public-ryan/jetson/models/init.sh",
+          "Unarchive": "NONE",
+          "Permission": {
+            "Read": "OWNER",
+            "Execute": "NONE"
+          }
+        }
+      ]
+    }
+  ],
+  "Lifecycle": {}
+}

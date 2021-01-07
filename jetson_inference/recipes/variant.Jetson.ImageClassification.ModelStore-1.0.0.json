@@ -1,0 +1,34 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "variant.Jetson.ImageClassification.ModelStore",
+  "ComponentVersion": "0.1.1",
+  "ComponentType": "aws.greengrass.generic",
+  "ComponentDescription": "Downloads the resnet18_v1 image classification ML models for NVIDIA Jetson device to the device as artifacts.",
+  "ComponentPublisher": "AWS",
+  "ComponentDependencies": {
+    "aws.greengrass.Nucleus": {
+      "VersionRequirement": ">=2.0.3 <2.1.0",
+      "DependencyType": "SOFT"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux",
+        "architecture": "aarch64"
+      },
+      "Lifecycle": {},
+      "Artifacts": [
+        {
+          "Uri": "s3://public-ryan/jetson/models/resnet18_v1-jetson.zip",
+          "Unarchive": "ZIP",
+          "Permission": {
+            "Read": "OWNER",
+            "Execute": "NONE"
+          }
+        }
+      ]
+    }
+  ],
+  "Lifecycle": {}
+}

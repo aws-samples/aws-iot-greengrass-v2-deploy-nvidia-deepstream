@@ -1,0 +1,34 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "variant.Jetson.DLR",
+  "ComponentVersion": "1.0.0",
+  "ComponentType": "aws.greengrass.generic",
+  "ComponentDescription": "DLR is a compact, common runtime for deep learning models and decision tree models compiled by AWS SageMaker Neo, TVM, or Treelite.",
+  "ComponentPublisher": "AWS",
+  "ComponentDependencies": {
+    "aws.greengrass.Nucleus": {
+      "VersionRequirement": ">=2.0.3 <2.1.0",
+      "DependencyType": "SOFT"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux",
+        "architecture": "aarch64"
+      },
+      "Lifecycle": {},
+      "Artifacts": [
+        {
+          "Uri": "s3://public-ryan/jetson/models/installer.zip",
+          "Unarchive": "ZIP",
+          "Permission": {
+            "Read": "OWNER",
+            "Execute": "NONE"
+          }
+        }
+      ]
+    }
+  ],
+  "Lifecycle": {}
+}
