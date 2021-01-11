@@ -16,13 +16,13 @@ Technologies used:
 * AWS CLI with GreengrassV2 support (https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) 
 * Jetpack 4.4 (https://developer.nvidia.com/EMBEDDED/Jetpack)
 * numpy (This takes a long time to install, if you don't have it installer will try to install)
-* opencv (Should be pre-installed with Jetpack 4.4)
+* opencv-python (Should be pre-installed with Jetpack 4.4)
 
 
 ## Image Inference
+*PLEASE NOTE*: This deployment may install/modify components on your Jetson device. It will install some python packages outside of a virtual environment. This is because python-opencv is specially installed as part of Jetpack 4.4 and the debian package may run for a long period of time and not succesfully complete (numpy can also take a long time to install).
 
-To install, copy the contents of artifacts and recipes to your GreengrassCore directory on your Jetson device.
-
+replace GreengrassCore where mentioned 
 run:
 ```
  cd ~/GreengrassCore
