@@ -121,8 +121,6 @@ clone_repo() {
 }
 check_dlr() {
     machine="${1}"
-    jetsonGPU=
-
     get_dlr_version=$(python3 -c "$get_dlr_version_command")
     if [[ "$get_dlr_version" == "$dlr_version" ]]; then
         return 0
@@ -130,20 +128,7 @@ check_dlr() {
         return 1
     fi
 }
-make_and_install() {
-    make -j"$(($(nproc) + 1))"
-    cd ../python
-    python3 setup.py install
-}
-remove_cloned_directory() {
-    current_path=$(dirname $(realpath $0))
-    if [[ "$current_path" == *"$dlr_directory"* ]]; then
-        arr=(${current_path//"$dlr_directory"/ })
-        sudo rm -rf ${arr[0]}"$dlr_directory"
-    else
-        sudo rm -rf "$dlr_directory"
-    fi
-}
+
 is_debian() {
     debian=$(sudo apt-get -v &>/dev/null && echo "apt-get")
     if [[ "$debian" == "apt-get" ]]; then
