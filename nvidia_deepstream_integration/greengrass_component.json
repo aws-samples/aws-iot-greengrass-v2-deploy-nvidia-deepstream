@@ -1,0 +1,40 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "deepstream-deployment",
+  "ComponentVersion": "1.0.8",
+  "ComponentType": "aws.greengrass.generic",
+  "ComponentDescription": "My first deepstream application",
+  "ComponentPublisher": "Amazon",
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "Message": "world"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Name": "Linux",
+      "Lifecycle": {
+        "Run": {
+          "Script": "deepstream-app -c {artifacts:decompressedPath}/jetson_deployment/jetson_deployment/config.txt",
+          "RequiresPrivilege": true
+        }
+      },
+      "Artifacts": [
+        {
+          "Uri": "s3://to-be-shared-with-nvidia/jetson_deployment.zip",
+          "Digest": "GvFeIVAptwtG5LOtf2DcZrYrMr67R6yaAdi1MybmfgE=",
+          "Algorithm": "SHA-256",
+          "Unarchive": "ZIP",
+          "Permission": {
+            "Read": "ALL",
+            "Execute": "ALL"
+          }
+        }
+      ]
+    }
+  ],
+  "Lifecycle": {}
+}
