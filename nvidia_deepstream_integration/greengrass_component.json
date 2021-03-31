@@ -24,7 +24,7 @@
       },
       "Artifacts": [
         {
-          "Uri": "s3://to-be-shared-with-nvidia/jetson_deployment.zip",
+          "Uri": "s3://[YOUR_S3_BUCKET_NAME]/jetson_deployment.zip",
           "Digest": "GvFeIVAptwtG5LOtf2DcZrYrMr67R6yaAdi1MybmfgE=",
           "Algorithm": "SHA-256",
           "Unarchive": "ZIP",
