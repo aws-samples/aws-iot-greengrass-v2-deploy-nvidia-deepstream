@@ -20,7 +20,7 @@
       "Lifecycle": {},
       "Artifacts": [
         {
-          "Uri": "s3://public-ryan/jetson/models/installer.zip",
+          "Uri": "s3://BUCKET_NAME/artifacts/variant.Jetson.DLR/1.0.0/installer.zip",
           "Unarchive": "ZIP",
           "Permission": {
             "Read": "OWNER",
