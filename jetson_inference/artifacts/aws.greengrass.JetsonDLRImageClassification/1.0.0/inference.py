@@ -29,7 +29,7 @@ os.system("echo {}".format("Using cv2 from '{}'.".format(cv2.__file__)))
 hostname = os.getenv("AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT")
 print("hostname=", hostname)
 print("svcid=", os.getenv("SVCUID"))
-enableSendMessages = False
+enableSendMessages = True
 if "SVCUID" in os.environ and "AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT" in os.environ:
     print("Found SVUID and AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT enable messaging.")
     enableSendMessages = True
