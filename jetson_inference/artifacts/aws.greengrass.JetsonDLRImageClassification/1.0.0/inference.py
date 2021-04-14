@@ -173,8 +173,8 @@ score_threshold = 0.3
 max_no_of_results = 5
 camera = None
 image_data = None
-sample_image = (mlRootPath + "/images/" + imageName).format(
-    os.path.dirname(os.path.realpath(__file__)))
+# sample_image = (mlRootPath + "/images/" + imageName).format(
+#     os.path.dirname(os.path.realpath(__file__)))
 results_directory = mlRootPath + "/inference_log/"
 # Create the results directory if it does not exist already
 os.makedirs(results_directory, exist_ok=True)
@@ -187,15 +187,19 @@ os.system("echo {}".format("Inference logs can be found under the directory '{}'
 
 # Load image based on the format - support jpg,jpeg,png and npy.
 
-def load_image(img):
-    if img.endswith(".jpg", -4,) or img.endswith(".png", -4,) or img.endswith(".jpeg", -5,):
-        image = bytearray(open(img, 'rb').read())
+def load_image(imgName):
+    image_data = None
+
+    sample_image = (mlRootPath + "/images/" + imgName).format(
+        os.path.dirname(os.path.realpath(__file__)))
+    if imgName.endswith(".jpg", -4,) or imgName.endswith(".png", -4,) or imgName.endswith(".jpeg", -5,):
+        image = bytearray(open(sample_image, 'rb').read())
         image_data = cv2.imdecode(np.frombuffer(image, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
         image_data = cv2.resize(image_data, (224,224))
         print("loaded image:",imageName)
-    elif img.endswith(".npy", -4,):
+    elif imgName.endswith(".npy", -4,):
         # the shape for the resnet18 model is [1,3,224,224]
-        image_data = np.load(img).astype(np.float32)
+        image_data = np.load(sample_image).astype(np.float32)
 
     return image_data
 
@@ -205,7 +209,7 @@ def load_image(img):
 while True:
     # predict_from_cam()
     
-    image_data = load_image(sample_image)
+    image_data = load_image(imageName)
     if image_data is not None:
         predict_from_image(image_data)
     else:
