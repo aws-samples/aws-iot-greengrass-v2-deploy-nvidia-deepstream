@@ -56,7 +56,7 @@
       "Lifecycle": {
         "install": {
           "RequiresPrivilege": "true",
-          "script": "\n                                    bash {artifacts:path}/init.sh {artifacts:decompressedPath}/image_classification/sample_images {configuration:/MLRootPath}\n                                    bash {variant.Jetson.DLR:artifacts:decompressedPath}/installer/installer.sh -a {configuration:/Accelerator} -p {configuration:/MLRootPath}",
+          "script": "\n                                    bash {artifacts:decompressedPath}/init.sh {artifacts:decompressedPath}/image_classification/sample_images {configuration:/MLRootPath}\n                                    bash {variant.Jetson.DLR:artifacts:decompressedPath}/installer/installer.sh -a {configuration:/Accelerator} -p {configuration:/MLRootPath}",
           "timeout": "900"
         },
         "run": {
@@ -66,16 +66,8 @@
       },
       "Artifacts": [
         {
-          "Uri": "s3://public-ryan/jetson/models/image_classification.zip",
+          "Uri": "s3://BUCKET_NAME/artifacts/aws.greengrass.JetsonDLRImageClassification/1.0.0/image_classification.zip",
           "Unarchive": "ZIP",
-          "Permission": {
-            "Read": "OWNER",
-            "Execute": "NONE"
-          }
-        },
-        {
-          "Uri": "s3://public-ryan/jetson/models/init.sh",
-          "Unarchive": "NONE",
           "Permission": {
             "Read": "OWNER",
             "Execute": "NONE"

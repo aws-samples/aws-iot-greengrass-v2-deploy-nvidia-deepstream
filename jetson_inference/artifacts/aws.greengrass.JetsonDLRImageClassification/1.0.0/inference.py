@@ -29,18 +29,16 @@ os.system("echo {}".format("Using cv2 from '{}'.".format(cv2.__file__)))
 hostname = os.getenv("AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT")
 print("hostname=", hostname)
 print("svcid=", os.getenv("SVCUID"))
-enableSendMessages = False
-if "SVCUID" in os.environ and "AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT" in os.environ:
-    print("Found SVUID and AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT enable messaging.")
-    enableSendMessages = True
+enableSendMessages = True
+# if "SVCUID" in os.environ and "AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT" in os.environ:
+#     print("Found SVUID and AWS_GG_NUCLEUS_DOMAIN_SOCKET_FILEPATH_FOR_COMPONENT enable messaging.")
+#     enableSendMessages = True
 
 TIMEOUT = 10
 if enableSendMessages:
    ipc_utils = ipcutil.IPCUtils()
    connection = ipc_utils.connect()
    ipc_client = client.GreengrassCoreIPCClient(connection)
-
-
 
 
 def enable_camera():
@@ -175,8 +173,8 @@ score_threshold = 0.3
 max_no_of_results = 5
 camera = None
 image_data = None
-sample_image = (mlRootPath + "/images/" + imageName).format(
-    os.path.dirname(os.path.realpath(__file__)))
+# sample_image = (mlRootPath + "/images/" + imageName).format(
+#     os.path.dirname(os.path.realpath(__file__)))
 results_directory = mlRootPath + "/inference_log/"
 # Create the results directory if it does not exist already
 os.makedirs(results_directory, exist_ok=True)
@@ -186,23 +184,35 @@ dlr_model = dlr.DLRModel(model_path, context)
 
 os.system("echo {}".format("Inference logs can be found under the directory '{}' in the name of the model used. ".format(
     results_directory)))
+
 # Load image based on the format - support jpg,jpeg,png and npy.
-if imageName.endswith(".jpg", -4,) or imageName.endswith(".png", -4,) or imageName.endswith(".jpeg", -5,):
-    image = bytearray(open(sample_image, 'rb').read())
-    image_data = cv2.imdecode(np.frombuffer(image, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
-    image_data = cv2.resize(image_data, (224,224))
-    print("loaded image:",imageName)
-elif imageName.endswith(".npy", -4,):
-    # the shape for the resnet18 model is [1,3,224,224]
-    image_data = np.load(sample_image).astype(np.float32)
+
+def load_image(imgName):
+    image_data = None
+
+    sample_image = (mlRootPath + "/images/" + imgName).format(
+        os.path.dirname(os.path.realpath(__file__)))
+    if imgName.endswith(".jpg", -4,) or imgName.endswith(".png", -4,) or imgName.endswith(".jpeg", -5,):
+        image = bytearray(open(sample_image, 'rb').read())
+        image_data = cv2.imdecode(np.frombuffer(image, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
+        image_data = cv2.resize(image_data, (224,224))
+        print("loaded image:",imageName)
+    elif imgName.endswith(".npy", -4,):
+        # the shape for the resnet18 model is [1,3,224,224]
+        image_data = np.load(sample_image).astype(np.float32)
+
+    return image_data
+
 
 # enable_camera()
 
 while True:
     # predict_from_cam()
-    # comment the below if-else statements and uncomment the above line after enabling the camera to predict images from the camera
+    
+    image_data = load_image(imageName)
     if image_data is not None:
         predict_from_image(image_data)
     else:
         os.system("Images of format jpg,jpeg,png and npy are only supported.")
+    image_data = None
     time.sleep(int(prediction_interval_secs))

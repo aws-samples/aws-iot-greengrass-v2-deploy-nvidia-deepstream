@@ -20,7 +20,7 @@
       "Lifecycle": {},
       "Artifacts": [
         {
-          "Uri": "s3://public-ryan/jetson/models/resnet18_v1-jetson.zip",
+          "Uri": "s3://BUCKET_NAME/artifacts/variant.Jetson.ImageClassification.ModelStore/0.1.1/resnet18_v1-jetson.zip",
           "Unarchive": "ZIP",
           "Permission": {
             "Read": "OWNER",
